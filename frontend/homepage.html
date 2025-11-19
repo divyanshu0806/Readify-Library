@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify — simplified reading for everyone</title>
+    <link rel="stylesheet" href="homepage.css">
+    <style>
+        /* Dashboard Sections */
+        .dashboard-section {
+            margin: 1.5rem 0;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .book-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .book-item:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .book-item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-item-author {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-item-dates {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .date-info {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #555;
+        }
+
+        .date-info.due {
+            color: #f56565;
+            font-weight: 600;
+        }
+
+        .date-info.returned {
+            color: #48bb78;
+        }
+
+        .return-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .return-btn:hover {
+            background: #38a169;
+        }
+
+        .status-badge-item {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .status-borrowed {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .status-returned {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-overdue {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo" onclick="showSection('home')">📚 Readify</div>
+            <ul class="nav-links">
+                <li><a onclick="showSection('home')">Home</a></li>
+                <li><a onclick="showSection('books')">Books</a></li>
+                <li><a onclick="showSection('about')">About</a></li>
+                <li><a onclick="showSection('contact')">Contact</a></li>
+                <li><a onclick="showSection('login')" class="btn-login" style="color: #667eea;">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <div id="home" class="page-section active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Simplified reading for everyone</h1>
+                <p>Access thousands of books from anywhere, anytime. Your digital library awaits.</p>
+                <div class="search-bar">
+                    <input type="text" id="homeSearch" placeholder="Search by title, author, or genre...">
+                    <button onclick="searchFromHome()">Search</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="features-container">
+                <h2 class="section-title">Why Choose Our Library?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Advanced Search</h3>
+                        <p>Find books easily with powerful filters by author, title, genre, and publication date.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>User Authentication</h3>
+                        <p>Secure login system for students and librarians with personalized dashboards.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📖</div>
+                        <h3>Easy Borrowing</h3>
+                        <p>Borrow and return books with just a few clicks. Track all your reading activities.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Borrowing History</h3>
+                        <p>Keep track of all books you've borrowed and manage your reading timeline.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Real-time Updates</h3>
+                        <p>Get instant updates on book availability and due dates for borrowed items.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure Database</h3>
+                        <p>Your data is protected with enterprise-level security and reliable backups.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <h3>10,000+</h3>
+                    <p>Books Available</p>
+                </div>
+                <div class="stat-item">
+                    <h3>5,000+</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <p>Categories</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>Access</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <h2>Ready to Start Reading?</h2>
+            <p>Join our community of readers and unlock access to thousands of books today.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="showSection('login')">Sign Up Now</button>
+                <button class="btn btn-secondary" onclick="showSection('books')">Browse Books</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Books Section -->
+    <div id="books" class="page-section">
+        <div class="books-page">
+            <div class="books-header">
+                <h1>Browse Our Collection</h1>
+                <p>Explore thousands of books across various genres</p>
+            </div>
+
+            <div class="filter-section">
+                <h3 style="margin-bottom: 1rem;">Filter Books</h3>
+                <div class="filter-grid">
+                    <input type="text" id="searchTitle" class="filter-input" placeholder="Search by title..." oninput="filterBooks()">
+                    <input type="text" id="searchAuthor" class="filter-input" placeholder="Search by author..." oninput="filterBooks()">
+                    <select id="searchGenre" class="filter-input" onchange="filterBooks()">
+                        <option value="">All Genres</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Biography">Biography</option>
+                    </select>
+                    <select id="searchStatus" class="filter-input" onchange="filterBooks()">
+                        <option value="">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="borrowed">Borrowed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="books-grid" id="booksGrid"></div>
+        </div>
+    </div>
+
+    <!-- Login Section -->
+    <div id="login" class="page-section">
+        <div class="login-page">
+            <div class="login-container">
+                
+                <!-- LOGIN FORM SECTION -->
+                <div id="loginFormSection">
+                    <div class="login-header">
+                        <h1>Welcome Back!</h1>
+                        <p>Login to access your library account</p>
+                    </div>
+
+                    <div class="login-tabs">
+                        <button class="login-tab active" onclick="switchTab('student')">Student</button>
+                        <button class="login-tab" onclick="switchTab('librarian')">Librarian</button>
+                    </div>
+
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Email or Username</label>
+                            <input type="text" id="loginUsername" required placeholder="Enter your email or username">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" required placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="submit-btn">Login</button>
+                    </form>
+
+                    <p style="text-align: center; margin-top: 1.5rem; color: #666;">
+                        Don't have an account? <a href="javascript:void(0);" onclick="showRegistrationForm()" style="color: #667eea; font-weight: 600;">Sign up here</a>
+                    </p>
+                </div>
+
+                <!-- REGISTRATION FORM SECTION -->
+                <div id="registrationFormSection" style="display: none;">
+                    <div class="login-header">
+                        <h1>Create Account</h1>
+                        <p>Join our library community</p>
+                    </div>
+
+                    <div class="login-tabs">
+                        <button class="login-tab active" onclick="switchTab('student')">Student</button>
+                        <button class="login-tab" onclick="switchTab('librarian')">Librarian</button>
+                    </div>
+
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="regFullName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Username *</label>
+                            <input type="text" id="regUsername" required placeholder="Choose a username" minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="regEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="regPhone" placeholder="Enter phone number (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" id="regAddress" placeholder="Enter your address (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label>Password *</label>
+                            <input type="password" id="regPassword" required placeholder="Create a password" minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password *</label>
+                            <input type="password" id="regConfirmPassword" required placeholder="Confirm your password" minlength="6">
+                        </div>
+                        <button type="submit" class="submit-btn">Register</button>
+                    </form>
+
+                    <p style="text-align: center; margin-top: 1.5rem; color: #666;">
+                        Already have an account? <a href="javascript:void(0);" onclick="showLoginForm()" style="color: #667eea; font-weight: 600;">Login here</a>
+                    </p>
+                </div>
+
+                <!-- USER DASHBOARD SECTION -->
+                <div id="userDashboard" class="hidden">
+                    <div class="user-info">
+                        <h3>Welcome, <span id="userName">User</span>!</h3>
+                        <div class="user-stats">
+                            <div class="stat-box">
+                                <h4 id="borrowedCount">0</h4>
+                                <p>Currently Borrowed</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4 id="historyCount">0</h4>
+                                <p>Total History</p>
+                            </div>
+                        </div>
+                        <button onclick="loadUserStats()" style="background: #48bb78; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-top: 1rem; font-weight: 600;">
+                            🔄 Refresh Data
+                        </button>
+                    </div>
+
+                    <!-- Currently Borrowed Books -->
+                    <div class="dashboard-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="color: #667eea; margin: 0;">📚 Currently Borrowed</h3>
+                            <button onclick="loadCurrentBooks()" style="background: #667eea; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">
+                                🔄 Refresh
+                            </button>
+                        </div>
+                        <div id="currentBooksContainer">
+                            <p style="text-align: center; color: #666;">Loading...</p>
+                        </div>
+                    </div>
+
+                    <!-- Borrowing History -->
+                    <div class="dashboard-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="color: #667eea; margin: 0;">📖 Borrowing History</h3>
+                            <button onclick="loadBorrowingHistory()" style="background: #667eea; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">
+                                🔄 Refresh
+                            </button>
+                        </div>
+                        <div id="historyContainer">
+                            <p style="text-align: center; color: #666;">Loading...</p>
+                        </div>
+                    </div>
+
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="page-section">
+        <div class="about-page">
+            <div class="about-container">
+                <div class="about-hero">
+                    <h1>About Readify</h1>
+                    <p>Welcome to Readify, your comprehensive digital library system designed to make reading accessible, convenient, and enjoyable for everyone. We believe that knowledge should be available to all, and we're committed to providing a seamless platform for students, educators, and book enthusiasts.</p>
+                </div>
+
+                <div class="mission-vision">
+                    <div class="mission-card">
+                        <h2>🎯 Our Mission</h2>
+                        <p>To democratize access to knowledge by providing a user-friendly, efficient, and secure digital library platform that connects readers with an extensive collection of books across all genres and subjects.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h2>👁️ Our Vision</h2>
+                        <p>To become the leading digital library system that transforms how people discover, access, and engage with books, fostering a global community of lifelong learners and passionate readers.</p>
+                    </div>
+                </div>
+
+                <div class="mission-card">
+                    <h2>💡 What We Offer</h2>
+                    <p>Readify provides a comprehensive library management system with advanced search capabilities, secure user authentication, easy borrowing processes, and detailed tracking of your reading journey. Whether you're a student researching for your next paper or a casual reader exploring new genres, we've got you covered.</p>
+                    <br>
+                    <p>Our platform is built with modern technology to ensure fast, reliable, and secure access to thousands of books. With features like personalized recommendations, borrowing history tracking, and real-time availability updates, we make library management effortless for both users and administrators.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="page-section">
+        <div class="contact-page">
+            <div class="contact-container">
+                <h1 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #333;">Get In Touch</h1>
+                
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2>Contact Information</h2>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <p>info@readify.com</p>
+                                <p>support@readify.com</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-details">
+                                <h3>Phone</h3>
+                                <p>(555) 123-4567</p>
+                                <p>Mon-Fri: 9AM - 6PM</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h3>Address</h3>
+                                <p>Kapurthala, Punjab, India</p>
+                                <p>Pin: 144601</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">🕐</div>
+                            <div class="contact-details">
+                                <h3>Working Hours</h3>
+                                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                                <p>Saturday: 10:00 AM - 4:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h2>Send Us a Message</h2>
+                        <form onsubmit="handleContactSubmit(event)">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" required placeholder="Enter your full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" required placeholder="Enter your email">
+                            </div>
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="text" required placeholder="What is this regarding?">
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea required placeholder="Write your message here..."></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>Readify is your one-stop solution for accessing and managing your reading materials online.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a onclick="showSection('home')">Home</a></li>
+                    <li><a onclick="showSection('books')">Browse Books</a></li>
+                    <li><a onclick="showSection('about')">About</a></li>
+                    <li><a onclick="showSection('contact')">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#help">Help Center</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul>
+                    <li>Email: info@readify.com</li>
+                    <li>Phone: (555) 123-4567</li>
+                    <li>Address: Kapurthala, Punjab, India</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Digital Library System. All rights reserved. | IT Workshop Project</p>
+        </div>
+    </footer>
+
+    <script src="home_script.js"></script>
+</body>
+</html>
